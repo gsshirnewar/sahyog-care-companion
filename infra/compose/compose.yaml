@@ -1,0 +1,98 @@
+name: sahyog-care-companion
+
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: services/api/Dockerfile
+    command: ["uvicorn", "services.api.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    env_file:
+      - path: ../env/local/.env
+        required: false
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      SYNTHETIC_DATA_ONLY: ${SYNTHETIC_DATA_ONLY:-true}
+      SUPABASE_URL: ${SUPABASE_URL:-http://host.docker.internal:54321}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-replace-with-local-anon-key}
+      REDIS_URL: redis://:${REDIS_PASSWORD:-local-only-change-this-password}@redis:6379/0
+    ports:
+      - "${API_BIND_HOST:-127.0.0.1}:8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - app-internal
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ../..
+      dockerfile: services/api/Dockerfile
+    command: ["python", "-m", "services.workers.worker"]
+    env_file:
+      - path: ../env/local/.env
+        required: false
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      SYNTHETIC_DATA_ONLY: ${SYNTHETIC_DATA_ONLY:-true}
+      SUPABASE_URL: ${SUPABASE_URL:-http://host.docker.internal:54321}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-replace-with-local-anon-key}
+      REDIS_URL: redis://:${REDIS_PASSWORD:-local-only-change-this-password}@redis:6379/0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - app-internal
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4-alpine
+    command:
+      - sh
+      - -c
+      - exec redis-server --appendonly yes --requirepass "$${REDIS_PASSWORD}"
+    env_file:
+      - path: ../env/local/.env
+        required: false
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-local-only-change-this-password}
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-internal
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+networks:
+  # Internal Docker network has no direct route to the public internet.
+  # API is published only on loopback; local Supabase is reached via host port mapping.
+  app-internal:
+    internal: true
+
+volumes:
+  redis-data:

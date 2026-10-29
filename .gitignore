@@ -1,0 +1,17 @@
+# Local-only configuration and credentials
+.env
+.env.*
+!.env.example
+!**/.env.example
+infra/env/local/.env
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local test/build output
+.pytest_cache/
+.coverage
+htmlcov/
