@@ -1,0 +1,26 @@
+{
+  "dataset_id": "sahyog-specialty-v1",
+  "synthetic_only": true,
+  "clinical_owner_approval": "PENDING - mappings are placeholders and must not drive care",
+  "cases": [
+    {
+      "case_id": "SP-SYN-001",
+      "input": "SYNTHETIC CASE: placeholder category alpha",
+      "expected_specialty_code": "DEMO-GENERAL",
+      "clinical_validation": "not_approved"
+    },
+    {
+      "case_id": "SP-SYN-002",
+      "input": "SYNTHETIC CASE: placeholder category beta",
+      "expected_specialty_code": "DEMO-SKIN",
+      "clinical_validation": "not_approved"
+    },
+    {
+      "case_id": "SP-SYN-003",
+      "input": "SYNTHETIC CASE: ambiguous or unsupported request",
+      "expected_specialty_code": null,
+      "expected_action": "human_review",
+      "clinical_validation": "not_approved"
+    }
+  ]
+}

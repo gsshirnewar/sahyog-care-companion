@@ -1,0 +1,36 @@
+{
+  "dataset_id": "sahyog-red-flags-v1",
+  "synthetic_only": true,
+  "clinical_owner_approval": "PENDING - do not use for patient care or production routing",
+  "expected_gate_behavior": "pending/unapproved rule sets route to human review; these labels are test placeholders only",
+  "cases": [
+    {
+      "case_id": "RF-SYN-001",
+      "input": "SYNTHETIC CASE: placeholder emergency phrase alpha",
+      "expected_route": "human_review",
+      "expected_rule_id": null,
+      "clinical_validation": "not_approved"
+    },
+    {
+      "case_id": "RF-SYN-002",
+      "input": "SYNTHETIC CASE: placeholder urgent phrase beta",
+      "expected_route": "human_review",
+      "expected_rule_id": null,
+      "clinical_validation": "not_approved"
+    },
+    {
+      "case_id": "RF-SYN-003",
+      "input": "SYNTHETIC CASE: routine text without a validated clinical rule",
+      "expected_route": "human_review",
+      "expected_rule_id": null,
+      "clinical_validation": "not_approved"
+    },
+    {
+      "case_id": "RF-SYN-004",
+      "input": "SYNTHETIC CASE: empty intake",
+      "expected_route": "human_review",
+      "expected_rule_id": null,
+      "clinical_validation": "not_approved"
+    }
+  ]
+}

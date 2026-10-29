@@ -5,6 +5,11 @@ import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from services.api.app.middleware.request_context import RequestContextMiddleware
+from services.api.app.routers.triage import router as triage_router
+from services.api.app.routers.records import router as records_router
+from services.api.app.routers.scribe import router as scribe_router
+
 if os.getenv("SYNTHETIC_DATA_ONLY", "true").lower() != "true":
     raise RuntimeError("This bootstrap API is restricted to synthetic data")
 
@@ -13,6 +18,10 @@ app = FastAPI(
     version="0.1.0",
     description="Synthetic-only foundation bootstrap; no clinical decisions are performed.",
 )
+app.add_middleware(RequestContextMiddleware)
+app.include_router(triage_router)
+app.include_router(records_router)
+app.include_router(scribe_router)
 
 
 class HealthStatus(BaseModel):

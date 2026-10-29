@@ -1,0 +1,83 @@
+{
+  "dataset_id": "sahyog-foundation-synthetic-v1",
+  "synthetic_only": true,
+  "contains_real_personal_data": false,
+  "purpose": "local schema and foundation integration tests",
+  "patients": [
+    {
+      "patient_id": "20000000-0000-4000-8000-000000000001",
+      "auth_user_id": "10000000-0000-4000-8000-000000000001",
+      "identity_ref": "synthetic-patient-a",
+      "language_tag": "en"
+    },
+    {
+      "patient_id": "20000000-0000-4000-8000-000000000002",
+      "auth_user_id": "10000000-0000-4000-8000-000000000002",
+      "identity_ref": "synthetic-patient-b",
+      "language_tag": "mr"
+    }
+  ],
+  "clinics": [
+    {
+      "clinic_id": "21000000-0000-4000-8000-000000000001",
+      "site_code": "SYNTH-CLINIC-01",
+      "name": "Synthetic Clinic One",
+      "timezone": "Asia/Kolkata"
+    }
+  ],
+  "specialties": [
+    {
+      "specialty_id": "22000000-0000-4000-8000-000000000001",
+      "code": "DEMO-GENERAL",
+      "display_name": "General demo category",
+      "clinical_mapping_approved": false
+    },
+    {
+      "specialty_id": "22000000-0000-4000-8000-000000000002",
+      "code": "DEMO-SKIN",
+      "display_name": "Skin demo category",
+      "clinical_mapping_approved": false
+    }
+  ],
+  "doctors": [
+    {
+      "doctor_id": "23000000-0000-4000-8000-000000000001",
+      "clinic_id": "21000000-0000-4000-8000-000000000001",
+      "specialty_id": "22000000-0000-4000-8000-000000000001",
+      "display_name": "Synthetic Clinician One",
+      "registry_status": "synthetic_unverified"
+    },
+    {
+      "doctor_id": "23000000-0000-4000-8000-000000000002",
+      "clinic_id": "21000000-0000-4000-8000-000000000001",
+      "specialty_id": "22000000-0000-4000-8000-000000000002",
+      "display_name": "Synthetic Clinician Two",
+      "registry_status": "synthetic_unverified"
+    }
+  ],
+  "slots": [
+    {
+      "slot_id": "24000000-0000-4000-8000-000000000001",
+      "doctor_id": "23000000-0000-4000-8000-000000000001",
+      "clinic_id": "21000000-0000-4000-8000-000000000001",
+      "starts_at": "2099-01-01T09:00:00+05:30",
+      "ends_at": "2099-01-01T09:15:00+05:30",
+      "capacity": 2,
+      "reserved_count": 0
+    }
+  ],
+  "documents": [
+    {
+      "doc_id": "25000000-0000-4000-8000-000000000001",
+      "patient_id": "20000000-0000-4000-8000-000000000001",
+      "document_type": "synthetic-report",
+      "page_count": 1,
+      "pages": [
+        {
+          "page_number": 1,
+          "text": "SYNTHETIC TEST DOCUMENT. No real health information. Measurement token SAMPLE-A equals 42 units."
+        }
+      ]
+    }
+  ]
+}
